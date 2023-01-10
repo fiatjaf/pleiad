@@ -9,17 +9,25 @@ case class ArticleEditPage(name: String) extends Page
 
 object Main {
   val homeRoute = Route.static(HomePage, root)
-
   val viewRoute = Route[ArticleViewPage, String](
     encode = v => v.name,
     decode = arg => ArticleViewPage(arg),
     pattern = root / segment[String] / endOfSegments
   )
+  val editRoute = Route[ArticleEditPage, String](
+    encode = v => v.name,
+    decode = arg => ArticleEditPage(arg),
+    pattern = root / "edit" / segment[String] / endOfSegments
+  )
 
   val router = new Router[Page](
-    routes = List(homeRoute, viewRoute),
-    getPageTitle = _.toString,
-    serializePage = _.toString,
+    routes = List(editRoute, viewRoute, homeRoute),
+    getPageTitle = {
+      case HomePage              => "Pleiad"
+      case ArticleViewPage(name) => s"$name | Pleiad"
+      case ArticleEditPage(name) => s"[edit] $name | Pleiad"
+    },
+    serializePage = _ => "",
     deserializePage = _ => HomePage
   )(
     popStateEvents = L.windowEvents(_.onPopState),
@@ -28,6 +36,7 @@ object Main {
 
   val splitter = SplitRender[Page, L.HtmlElement](router.currentPageSignal)
     .collectSignal[ArticleViewPage](ArticleView.render(_))
+    .collectSignal[ArticleEditPage](ArticleEdit.render(_))
     .collectStatic(HomePage) { Home.render() }
 
   val app = L.mainTag(L.child <-- splitter.signal)
