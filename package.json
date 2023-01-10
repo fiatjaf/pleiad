@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "start": "./esbuild.js && sbt ~fastLinkJS",
+    "build": "./esbuild.js prod && ./sbtx fullLinkJS && mkdir -p dist/target/scala-3.1.1/nostrwiki-fastopt/ && cp index.html globals.bundle.js dist/ && cp target/scala-3.1.1/nostrwiki-opt/main.js dist/target/scala-3.1.1/nostrwiki-fastopt/"
+  },
+  "dependencies": {
+    "esbuild": "^0.14.23"
+  }
+}

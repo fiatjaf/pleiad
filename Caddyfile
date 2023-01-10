@@ -1,0 +1,10 @@
+{
+  admin off
+}
+
+http://localhost:3000
+
+root * .
+try_files {path} /index.html
+file_server
+log

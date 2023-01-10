@@ -1,0 +1,9 @@
+target
+.bsp
+globals.bundle.js
+yarn.lock
+node_modules
+.bloop
+.metals
+project/project
+metals.sbt
